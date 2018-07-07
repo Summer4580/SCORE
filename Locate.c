@@ -492,7 +492,7 @@ void onput(seqlist *L,int x)
 void save(seqlist *L)
 {
     FILE *fp;
-    fp=fopen("选手信息.txt","w");
+    fp=fopen("选手信息.csv","w");
     if(fp==NULL)
     {
         printf("文件打开失败！数据无法保存！\n");
@@ -506,15 +506,15 @@ void save(seqlist *L)
         fprintf(fp,"%s,",L->elem[i].name);
         fprintf(fp,"%s,",L->elem[i].sex);
         fprintf(fp,"%s,",L->elem[i].play_name);
-        fprintf(fp,"%s,",L->elem[i].play_category);
+        fprintf(fp,"%s,,",L->elem[i].play_category);
         for(j=0;j<10;j++)
         {
             fprintf(fp,"%.2lf,",L->elem[i].score[j]);
         }
         fprintf(fp,"%-2lf\n",L->elem[i].score_avg);
     }
-	printf("文件成功保存到《学生信息.txt》中\n");
-	fp=fopen("裁判信息.txt","w");
+	printf("文件成功保存到《学生信息.csv》中\n");
+	fp=fopen("裁判信息.csv","w");
     if(fp==NULL)
     {
         printf("文件打开失败！数据无法保存！\n");
@@ -527,7 +527,7 @@ void save(seqlist *L)
             fprintf(fp,"%s,",L->elem2[i].name);
             fprintf(fp,"%s\n",L->elem2[i].sex);
         }
-	printf("文件成功保存到《裁判信息.txt》中\n");
+	printf("文件成功保存到《裁判信息.csv》中\n");
 }
 
 void login(seqlist *L)
@@ -536,20 +536,37 @@ void login(seqlist *L)
     char s[1000];
     int i,j;
     i=0;
-    fp=fopen("选手信息.txt","r");
+    fp=fopen("裁判信息.csv","r");
     if(fp==NULL)
     {
         printf("文件打开失败！数据无法读取！\n");
         return ;
     }
-    fgets(s,1,fp);
+    fgets(s,1000,fp);
+    while(!feof(fp))
+    {
+        fscanf(fp,"%lf",&L->elem2[i].num);
+        fscanf(fp,",%s",L->elem2[i].name);
+        fscanf(fp,",%s\n",L->elem2[i].sex);
+        i++;
+    }
+    L->last2=i-1;
+    printf("裁判信息读取成功！\n");
+    fclose(fp);
+    i=0;
+    fp=fopen("选手信息.csv","r");
+    if(fp==NULL)
+    {
+        printf("文件打开失败！数据无法读取！\n");
+        return ;
+    }
+    fgets(s,1000,fp);
     while(!feof(fp))
     {
         fscanf(fp,"%lf,",&L->elem[i].num);
-        fscanf(fp,"%s,",L->elem[i].name);
         fscanf(fp,"%s,",L->elem[i].sex);
         fscanf(fp,"%s,",L->elem[i].play_name);
-        fscanf(fp,"%s,",L->elem[i].play_category);
+        fscanf(fp,"%s,,",L->elem[i].play_category);
         for(j=0;j<=L->last2;j++)
         {
             fscanf(fp,"%lf,",&L->elem[i].score[j]);
@@ -559,28 +576,11 @@ void login(seqlist *L)
                 L->elem[i].score_min=L->elem[i].score[j];
             L->elem[i].score_sum+=L->elem[i].score[j];
         }
-        fscanf(fp,"%lf",&L->elem[i].score_avg);
+        fscanf(fp,"%lf\n",&L->elem[i].score_avg);
         i++;
     }
     L->last=i-1;
     printf("学生信息读取成功！\n");
-    fclose(fp);
-    i=0;
-    fp=fopen("裁判信息.txt","r");
-    if(fp==NULL)
-    {
-        printf("文件打开失败！数据无法读取！\n");
-        return ;
-    }
-    while(!feof(fp))
-    {
-        fscanf(fp,"%lf",&L->elem2[i].num);
-        fscanf(fp,"%s",L->elem2[i].name);
-        fscanf(fp,"%s",L->elem2[i].sex);
-        i++;
-    }
-    L->last2=i-1;
-    printf("裁判信息读取成功！\n");
     fclose(fp);
 }
 void sort2(seqlist *L)
@@ -588,6 +588,7 @@ void sort2(seqlist *L)
     quicksort(L->elem, L->last+1, 0, L->last);
     onput(L,1);
 }
+
 void mean()
 {
 	seqlist l;
@@ -595,19 +596,20 @@ void mean()
 	while(1)
 	{
 		printf("\t|--------------------------------------------------------------|\n");
-		printf("\t|                      学生信息管理                            |\n");
+		printf("\t|                      分数信息管理                            |\n");
 		printf("\t|                     1.存入信息                               |\n");
 		printf("\t|                     2.查询信息                               |\n");
 		printf("\t|                     3.插入信息                               |\n");
 		printf("\t|                     4.修改信息                               |\n");
 		printf("\t|                     5.删除信息                               |\n");
 		printf("\t|                     6.选手分数排序                           |\n");
-		printf("\t|                     7.输出所有信息                           |\n");
-		printf("\t|                     8.读取文件                               |\n");
-		printf("\t|                     9.退出并保存                             |\n");
+		printf("\t|                     7.输出选手信息                           |\n");
+		printf("\t|                     8.输出裁判信息                           |\n");
+		printf("\t|                     9.读取文件                               |\n");
+		printf("\t|                     10.退出并保存                             |\n");
 		printf("\t|--------------------------------------------------------------|\n");
 
-		printf("请输入1-9:");
+		printf("请输入1-10:");
 		scanf("%d",&t);
 		switch(t)
 		{
@@ -617,9 +619,10 @@ void mean()
 			case 4 : Updata(&l); break;
 			case 5 : Delete(&l); break;
 			case 6 : sort2(&l); break;
-			case 7 : onput(&l,1);onput(&l,2); break;
-			case 8 : login(&l); break;
-			case 9 : save(&l); return 0;
+			case 7 : onput(&l,1); break;
+			case 8 : onput(&l,2); break;
+			case 9 : login(&l); break;
+			case 10 : save(&l); return 0;
 
 		}
 	}
