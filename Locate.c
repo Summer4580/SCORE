@@ -161,37 +161,6 @@ void Updata(seqlist *L)
             printf("信息修改完成！\n");
         }
     }
-/*    printf("请输入要修改的电话：\n");
-    scanf("%d",&tem);
-    q=Locate(*L,tem)-1;
-    if(q==-1)
-    {
-        printf("你要修改的元素不存在！\n");
-        return ;
-    }
-    else
-    {
-        L->elem[temp-1].score_max=0;
-        L->elem[temp-1].score_sum=0;
-        L->elem[trmp-1].score_min=10;
-        printf("请输入除去电话以外的信息:\n");
-		scanf("%-9s",L->elem[temp-1].name);
-		scanf("%-9s",L->elem[temp-1].sex);
-		scanf("%-10s",L->elem[temp-1].play_name);
-		scanf("%-10s",L->elem[temp-1].play_category);
-		for(i=0;i<10;i++)
-        {
-            scanf("%-5lf",&L->elem[temp-1].score[i]);
-            if(L->elem[temp-1].score_max<L->elem[temp-1].score[i])
-                L->elem[temp-1].score_max=L->elem[temp-1].score[i];
-            if(L->elem[temp-1].score_min>L->elem[temp-1].score[i])
-                L->elem[temp-1].score_min=L->elem[temp-1].score[i];
-            L->elem[temp-1].score_sum+=L->elem[temp-1].score[i];
-        }
-        L->elem[temp-1].score_avg=(L->elem[temp-1].score_sum-L->elem[temp-1].score_max-L->elem[temp-1].score_min)/8;
-        printf("信息修改完成！\n");
-    }
-*/
 }
 
 void Delete(seqlist *L)
@@ -627,18 +596,18 @@ void mean()
 	{
 		printf("\t|--------------------------------------------------------------|\n");
 		printf("\t|                      学生信息管理                            |\n");
-		printf("\t|                     1.存入选手信息                           |\n");
-		printf("\t|                     2.查询选手信息                           |\n");
-		printf("\t|                     3.插入选手信息                           |\n");
-		printf("\t|                     4.修改选手信息                           |\n");
-		printf("\t|                     5.删除选手信息                           |\n");
+		printf("\t|                     1.存入信息                               |\n");
+		printf("\t|                     2.查询信息                               |\n");
+		printf("\t|                     3.插入信息                               |\n");
+		printf("\t|                     4.修改信息                               |\n");
+		printf("\t|                     5.删除信息                               |\n");
 		printf("\t|                     6.选手分数排序                           |\n");
-		printf("\t|                     7.输出所有选手信息                       |\n");
+		printf("\t|                     7.输出所有信息                           |\n");
 		printf("\t|                     8.读取文件                               |\n");
 		printf("\t|                     9.退出并保存                             |\n");
 		printf("\t|--------------------------------------------------------------|\n");
 
-		printf("请输入1-12:");
+		printf("请输入1-9:");
 		scanf("%d",&t);
 		switch(t)
 		{
