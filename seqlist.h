@@ -3,7 +3,7 @@
 
 struct Player
 {
-	int num;    //ºÅÂë
+	double num;    //ºÅÂë
 	char name[20];   //ĞÕÃû
 	char sex[5];    //ĞÔ±ğ
 	char play_name[20];    //±íÑİÃû×Ö
@@ -18,7 +18,7 @@ typedef struct Player ElemType;
 
 struct Referee
 {
-	int num;    //ºÅÂë
+	double num;    //ºÅÂë
 	char name[20];   //ĞÕÃû
 	char sex[5];
 };

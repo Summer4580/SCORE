@@ -2,14 +2,13 @@
 #include "common.h"
 #include "seqlist.h"
 
-int  Locate(seqlist L,int num)
+int  Locate(seqlist L,double num)
 {
 	int i=0;        /*i为扫描计数器，初值为0，即从第一个元素开始比较*/
 	while ((i<=L.last)&&(L.elem[i].num!=num))		/*顺序扫描表，直到找到值为key的元素, 或扫描到表尾而没找到*/
 		i++;
 	if  (i<=L.last)
 	{
-		printf("该元素在线性表中的位置为:%d\n",i+1);
 		return(i+1);  /*若找到值为e的元素，则返回其序号*/
 	}
 
@@ -20,14 +19,13 @@ int  Locate(seqlist L,int num)
 
 	}
 }
-int  Locate2(seqlist L,int num)
+int  Locate2(seqlist L,double num)
 {
 	int i=0;        /*i为扫描计数器，初值为0，即从第一个元素开始比较*/
 	while ((i<=L.last2)&&(L.elem2[i].num!=num))		/*顺序扫描表，直到找到值为key的元素, 或扫描到表尾而没找到*/
 		i++;
 	if  (i<=L.last2)
 	{
-		printf("该元素在线性表中的位置为:%d\n",i+1);
 		return(i+1);  /*若找到值为e的元素，则返回其序号*/
 	}
 
@@ -40,40 +38,42 @@ int  Locate2(seqlist L,int num)
 }
 void look(seqlist *L)
 {
-	int q,temp,x;
-	printf("请输入1 or 2选择查找裁判还是选手：");
+	int temp,x,i,j;
+	double q;
+	printf("请输入1 or 2选择查找选手还是裁判：");
 	scanf("%d",&x);
 	if(x==1)
     {
         printf("请输入要查找的元素值:\n");
-        scanf("%d",&q);
-        temp=Locate(*L,q);
+        scanf("%lf",&q);
+        temp=Locate(*L,q)-1;
         if(temp!=-1)
         {
-            printf("电话-----姓名-----性别-----表演名称------表演类别--分数--1--2--3--4--5--6--7--8--9--10--最后得分\n");
-            printf("%-9d",L->elem[temp-1].num);
-            printf("%-9s",L->elem[temp-1].name);
-            printf("%-9s",L->elem[temp-1].sex);
-            printf("%-10s",L->elem[temp-1].play_name);
-            printf("%-10s",L->elem[temp-1].play_category);
-            for(i=0;i<10;i++)
+            printf("电话-----------姓名-----性别-----表演名称------表演类别--分数----1------2------3------4------5------6------7------8------9------10-----最后得分\n");
+            printf("%-15.0lf",L->elem[temp].num);
+            printf("%-9s",L->elem[temp].name);
+            printf("%-9s",L->elem[temp].sex);
+            printf("%-14s",L->elem[temp].play_name);
+            printf("%-18s",L->elem[temp].play_category);
+            for(j=0;j<=L->last2;j++)
+
             {
-                printf("%-5lf",L->elem[temp-1].score[i]);
+                printf("%-7.2lf",L->elem[temp].score[j]);
             }
-            printf("%-5lf",L->elem[temp-1].score_avg);
+            printf("%-7.2lf\n",L->elem[temp].score_avg);
         }
     }
     else
     {
         printf("请输入要查找的元素值:\n");
-        scanf("%d",&q);
-        temp=Locate2(*L,q);
+        scanf("%lf",&q);
+        temp=Locate2(*L,q)-1;
         if(temp!=-1)
         {
-            printf("电话-----姓名-----性别\n");
-            printf("%-9d",L->elem[temp-1].num);
-            printf("%-9s",L->elem[temp-1].name);
-            printf("%-9s",L->elem[temp-1].sex);
+            printf("电话-----------姓名-----性别\n");
+            printf("%-15.0lf",L->elem[temp].num);
+            printf("%-9s",L->elem[temp].name);
+            printf("%-9s",L->elem[temp].sex);
         }
     }
 /*	printf("请输入要查找的元素值:\n");
@@ -98,14 +98,16 @@ void look(seqlist *L)
 
 void Updata(seqlist *L)
 {
-    int tem,i,q,x;
-    printf("请输入1 or 2选择修改裁判还是选手：");
+    int i,q;
+    int x;
+    double tem;
+    printf("请输入1 or 2选择修改选手还是裁判：");
 	scanf("%d",&x);
-	if(x==2)
+	if(x==1)
     {
        printf("请输入要修改的电话：\n");
-        scanf("%d",&tem);
-        q=Locate(*L,tem)-1;
+        scanf("%lf",&tem);
+        q=Locate(*L,tem);
         if(q==-1)
         {
             printf("你要修改的元素不存在！\n");
@@ -113,32 +115,37 @@ void Updata(seqlist *L)
         }
         else
         {
-            L->elem[temp-1].score_max=0;
-            L->elem[temp-1].score_sum=0;
-            L->elem[trmp-1].score_min=10;
+            L->elem[q-1].score_max=0;
+            L->elem[q-1].score_sum=0;
+            L->elem[q-1].score_min=10;
             printf("请输入除去电话以外的信息:\n");
-            scanf("%s",L->elem[temp-1].name);
-            scanf("%s",L->elem[temp-1].sex);
-            scanf("%s",L->elem[temp-1].play_name);
-            scanf("%s",L->elem[temp-1].play_category);
-            for(i=0;i<10;i++)
+            printf("姓名: ");
+            scanf("%s",L->elem[q-1].name);
+            printf("性别: ");
+            scanf("%s",L->elem[q-1].sex);
+            printf("节目名称: ");
+            scanf("%s",L->elem[q-1].play_name);
+            printf("节目种类: ");
+            scanf("%s",L->elem[q-1].play_category);
+            printf("评委分数(%d个): ",L->last2+1);
+            for(i=0;i<=L->last2;i++)
             {
-                scanf("%lf",&L->elem[temp-1].score[i]);
-                if(L->elem[temp-1].score_max<L->elem[temp-1].score[i])
-                    L->elem[temp-1].score_max=L->elem[temp-1].score[i];
-                if(L->elem[temp-1].score_min>L->elem[temp-1].score[i])
-                    L->elem[temp-1].score_min=L->elem[temp-1].score[i];
-                L->elem[temp-1].score_sum+=L->elem[temp-1].score[i];
+                scanf("%lf",&L->elem[q-1].score[i]);
+                if(L->elem[q-1].score_max<L->elem[q-1].score[i])
+                    L->elem[q-1].score_max=L->elem[q-1].score[i];
+                if(L->elem[q-1].score_min>L->elem[q-1].score[i])
+                    L->elem[q-1].score_min=L->elem[q-1].score[i];
+                L->elem[q-1].score_sum+=L->elem[q-1].score[i];
             }
-            L->elem[temp-1].score_avg=(L->elem[temp-1].score_sum-L->elem[temp-1].score_max-L->elem[temp-1].score_min)/8;
+            L->elem[q-1].score_avg=(L->elem[q-1].score_sum-L->elem[q-1].score_max-L->elem[q-1].score_min)/8;
             printf("信息修改完成！\n");
         }
     }
     else
     {
-        printf("请输入要修改的电话：\n");
-        scanf("%d",&tem);
-        q=Locate2(*L,tem)-1;
+        printf("请输入要修改人的电话：\n");
+        scanf("%lf",&tem);
+        q=Locate2(*L,tem);
         if(q==-1)
         {
             printf("你要修改的元素不存在！\n");
@@ -147,8 +154,11 @@ void Updata(seqlist *L)
         else
         {
             printf("请输入除去电话以外的信息:\n");
-            scanf("%s",L->elem[temp-1].name);
-            scanf("%s",L->elem[temp-1].sex);
+            printf("姓名: ");
+            scanf("%s",L->elem2[q-1].name);
+            printf("性别: ");
+            scanf("%s",L->elem2[q-1].sex);
+            printf("信息修改完成！\n");
         }
     }
 /*    printf("请输入要修改的电话：\n");
@@ -187,14 +197,15 @@ void Updata(seqlist *L)
 void Delete(seqlist *L)
 {
 	int j;
-	int i,q,x;
-	printf("请输入1 or 2选择删除裁判还是选手：");
+	int i,x;
+	double q;
+	printf("请输入1 or 2选择删除选手还是裁判：");
 	scanf("%d",&x);
 	if(x==1)
     {
         printf("请输入要删除的元素:\n");
-        scanf("%d",&q);
-        i=Locate2(*L,q);
+        scanf("%lf",&q);
+        i=Locate(*L,q);
 
         if(i<1)
         {
@@ -206,14 +217,14 @@ void Delete(seqlist *L)
             L->elem[j-1]=L->elem[j];
             L->last--;
             printf("位序为%d的元素已经删除\n",i);
-            onput(L);
+            onput(L,x);
         }
     }
     else
     {
         printf("请输入要删除的元素:\n");
-        scanf("%d",&q);
-        i=Locate(*L,q);
+        scanf("%lf",&q);
+        i=Locate2(*L,q);
 
         if(i<1)
         {
@@ -225,43 +236,117 @@ void Delete(seqlist *L)
             L->elem2[j-1]=L->elem2[j];
             L->last2--;
             printf("位序为%d的元素已经删除\n",i);
-            onput(L);
+            onput(L,x);
         }
     }
 }
 
 int Insert(seqlist *L)
 {
-	ElemType x;
+	ElemType x1;
+	memset(x1.score,0,sizeof(x1.score));
+	ElemType2 x2;
 	int i;
+    printf("请输入1 or 2 选择要插入选手还是裁判: ");
+    int w;
+    scanf("%d",&w);
+    if(w==1)
+    {
+        x1.score_max=0;
+        x1.score_min=10;
+        x1.score_sum=0;
+        printf("请输入选手的信息:\n");
+        printf("电话: ");
+        scanf("%lf",&x1.num);
+        int temp;
+        temp=Locate(*L,x1.num);
+        if(temp==-1)
+        {
+            printf("你输入的号码重复!请重新操作\n");
+            return ;
+        }
+        printf("姓名: ");
+        scanf("%s",x1.name);
+        printf("性别: ");
+        scanf("%s",x1.sex);
+        printf("节目名称: ");
+        scanf("%s",x1.play_name);
+        printf("节目类别: ");
+        scanf("%s",x1.play_category);
+        printf("请输入选手的%d门分数: ",L->last2+1);
+        for(i=0;i<=L->last2;i++)
+        {
+            scanf("%lf",&x1.score[i]);
+            if(x1.score_max<x1.score[i])
+                x1.score_max=x1.score[i];
+            if(x1.score_min>x1.score[i])
+                x1.score_min=x1.score[i];
+            x1.score_sum+=x1.score[i];
+        }
+        x1.score_avg=(x1.score_sum-x1.score_max-x1.score_min)/8;
+        printf("信息录入完成！\n");
+        printf("请输入要插入的元素的位置:\n");
+        scanf("%d",&i);
 
-	printf("请输入要插入的元素(分别为学号、姓名、高数、英语、C语言):\n");
-	scanf("%d",&x.num);
-	scanf("%s",x.name);
-	scanf("%d",&x.math);
-	scanf("%d",&x.english);
-	scanf("%d",&x.c);
-	printf("请输入要插入的元素的位置:\n");
-	scanf("%d",&i);
+        int j;
 
-	int j;
+        if(L->last==MAXSIZE-1)
+        {
+            printf(" 表满\n");
+            return 0;
+        }
+        if(i<1||i>L->last+2)
+        {
+            printf("位序不合法\n");
+            return 0;
+        }
+        for(j=L->last;j>=i-1;j--)
+            L->elem[j+1]=L->elem[j];
+        L->elem[i-1]=x1;
+        L->last++;
+        onput(L,1);
+        return 1;
+    }
+    else
+    {
+        printf("请输入要插入的元素:\n");
+        printf("电话: ");
+        scanf("%lf",&x2.num);
+        int temp;
+        temp=Locate2(*L,x2.num);
+        if(temp==-1)
+        {
+            printf("你输入的号码重复!,请重新操作\n");
+            return ;
+        }
+        printf("姓名: ");
+        scanf("%s",x2.name);
+        printf("性别: ");
+        scanf("%s",x2.sex);
+        printf("信息录入完成！\n");
+        printf("请输入要插入的元素的位置:\n");
+        scanf("%d",&i);
 
-	if(L->last==MAXSIZE-1)
-	{
-		printf(" 表满\n");
-		return 0;
-	}
-	if(i<1||i>L->last+2)
-	{
-		printf("位序不合法\n");
-		return 0;
-	}
-	for(j=L->last;j>=i-1;j--)
-		L->elem[j+1]=L->elem[j];
-	L->elem[i-1]=x;
-	L->last++;
-	onput(L);
-	return 1;
+        int j;
+
+        if(L->last2==MAXSIZE-1)
+        {
+            printf(" 表满\n");
+            return 0;
+        }
+        if(i<1||i>L->last2+2)
+        {
+            printf("位序不合法\n");
+            return 0;
+        }
+        for(j=L->last2;j>=i-1;j--)
+            L->elem2[j+1]=L->elem2[j];
+        L->elem2[i-1]=x2;
+        L->last2++;
+        onput(L,2);
+        return 1;
+    }
+
 }
 //排序
 /*int compare(const void *a,const void *b)
@@ -303,7 +388,7 @@ void quicksort(ElemType array[], int maxlen, int begin, int end)
 
         while(i < j)
         {
-            if(array[i].num > array[begin].num)  // 如果比较的数组元素大于基准数，则交换位置。
+            if(array[i].score_avg > array[begin].score_avg)  // 如果比较的数组元素大于基准数，则交换位置。
             {
                 swap(&array[i], &array[j]);  // 交换两个数
                 j--;
@@ -321,7 +406,7 @@ void quicksort(ElemType array[], int maxlen, int begin, int end)
          * 最后将array[i]与array[begin]交换，进行两个分割部分的排序！以此类推，直到最后i = j不满足条件就退出！
          */
 
-        if(array[i].num >= array[begin].num)  // 这里必须要取等“>=”，否则数组元素由相同的值时，会出现错误！
+        if(array[i].score_avg >= array[begin].score_avg)  // 这里必须要取等“>=”，否则数组元素由相同的值时，会出现错误！
         {
             i--;
         }
@@ -336,190 +421,203 @@ void quicksort(ElemType array[], int maxlen, int begin, int end)
 
 void input(seqlist *L)
 {
-	int r,i;
+	int r,i,j;
+    printf("请输入1 or 2选择存入选手信息还是裁判信息: ");
+    int x;
+    scanf("%d",&x);
+    if(x==1)
+    {
+        printf("请输入线性表的长度:");
+        scanf("%d",&r);
 
-	printf("请输入线性表的长度:");
-	scanf("%d",&r);
+        L->last = r-1;
+        for(i=0;i<=L->last;i++)
+        {
+            L->elem[i].score_max=0;
+            L->elem[i].score_min=10;
+            L->elem[i].score_sum=0;
+            printf("请输入选手各项信息：\n");
+            printf("电话：");
+            scanf("%lf",&L->elem[i].num);
+            printf("姓名：");
+            scanf("%s",L->elem[i].name);
+            printf("性别：");
+            scanf("%s",L->elem[i].sex);
+            printf("节目名称：");
+            scanf("%s",L->elem[i].play_name);
+            printf("节目类别：");
+            scanf("%s",L->elem[i].play_category);
+            printf("评委打分(%d个)：",L->last2+1);
+            for(j=0;j<=L->last2;j++)
+            {
+                scanf("%lf",&L->elem[i].score[j]);
+                if(L->elem[i].score_max<L->elem[i].score[j])
+                    L->elem[i].score_max=L->elem[i].score[j];
+                if(L->elem[i].score_min>L->elem[i].score[j])
+                    L->elem[i].score_min=L->elem[i].score[j];
+                L->elem[i].score_sum+=L->elem[i].score[j];
+            }
+            L->elem[i].score_avg=(L->elem[i].score_sum-L->elem[i].score_max-L->elem[i].score_min)/(L->last2-1);
+        }
+        onput(L,x);
+    }
+    else
+    {
+        printf("请输入线性表的长度:");
+        scanf("%d",&r);
 
-	L->last = r-1;
-	printf("请输入线性表的各元素值(分别为学号、姓名、高数、英语、C语言):\n");
-	for(i=0; i<=r-1; i++)
-	{
-		scanf("%d",&L->elem[i].num);
-		scanf("%s",L->elem[i].name);
-		scanf("%d",&L->elem[i].math);
-		scanf("%d",&L->elem[i].english);
-		scanf("%d",&L->elem[i].c);
-	}
-	onput(L);
+        L->last2 = r-1;
+        printf("请输入线性表的各元素值:\n");
+        for(i=0; i<=r-1; i++)
+        {
+            printf("电话: ");
+            scanf("%lf",&L->elem2[i].num);
+            printf("姓名: ");
+            scanf("%s",L->elem2[i].name);
+            printf("性别: ");
+            scanf("%s",L->elem2[i].sex);
+        }
+        onput(L,x);
+    }
 }
 
-void onput(seqlist *L)
+void onput(seqlist *L,int x)
 {
-	quicksort(L->elem, L->last+1, 0, L->last);
-	printf("线性表现存元素：\n");
-	int i;
-	printf("学号-----姓名-----高数-----英语------C语言\n");
-	for(i=0;i<=L->last;i++)
-	{
-		printf("%-9d",L->elem[i].num);
-		printf("%-9s",L->elem[i].name);
-		printf("%-9d",L->elem[i].math);
-		printf("%-10d",L->elem[i].english);
-		printf("%-10d\n",L->elem[i].c);
-	}
+    if(x==1)
+    {
+        printf("-------------------------------------------选手：\n");
+        int i,j;
+        for(i=0;i<=L->last;i++)
+        {
+            printf("电话-----------姓名-----性别-----表演名称------表演类别--分数----1------2------3------4------5------6------7------8------9------10-----最后得分\n");
+            printf("%-15.0lf",L->elem[i].num);
+            printf("%-9s",L->elem[i].name);
+            printf("%-9s",L->elem[i].sex);
+            printf("%-14s",L->elem[i].play_name);
+            printf("%-18s",L->elem[i].play_category);
+            for(j=0;j<10;j++)
+            {
+                printf("%-7.2lf",L->elem[i].score[j]);
+            }
+            printf("%-7.2lf\n",L->elem[i].score_avg);
+        }
+    }
+    else
+    {
+
+        printf("-------------------------------------------裁判：\n");
+        int i,j;
+
+        for(i=0;i<=L->last2;i++)
+        {
+            printf("电话-----------姓名-----性别\n");
+            printf("%-15.0lf",L->elem2[i].num);
+            printf("%-9s",L->elem2[i].name);
+            printf("%-9s\n",L->elem2[i].sex);
+        }
+    }
+
+
 }
 
 void save(seqlist *L)
 {
     FILE *fp;
-    fp=fopen("学生信息.txt","w");
+    fp=fopen("选手信息.txt","w");
     if(fp==NULL)
     {
         printf("文件打开失败！数据无法保存！\n");
         return ;
     }
-    int i;
-    fprintf(fp,"学号-----姓名-----高数-----英语------C语言------总成绩------平均分\n");
-    for(i=0;i<=L->last;i++)
-	{
-		fprintf(fp,"%-9d%-9s%-9d%-10d%-11d%-12d%-10d\n",L->elem[i].num,L->elem[i].name,L->elem[i].math,L->elem[i].english,L->elem[i].c,L->elem[i].sum,L->elem[i].avg);
-	}
-	printf("文件成功保存到《学生信息.txt》中\n");
-}
-
-void fun1(seqlist *L)
-{
-	int i;
-	printf("学号-----姓名-----高数-----英语------C语言------总成绩\n");
-	for(i=0;i<=L->last;i++)
-	{
-		L->elem[i].sum=L->elem[i].math+L->elem[i].english+L->elem[i].c;
-		printf("%-9d",L->elem[i].num);
-		printf("%-9s",L->elem[i].name);
-		printf("%-9d",L->elem[i].math);
-		printf("%-10d",L->elem[i].english);
-		printf("%-10d",L->elem[i].c);
-		printf("%-10d\n",L->elem[i].sum);
-	}
-}
-
-void fun2(seqlist *L)
-{
-    int i;
-	printf("学号-----姓名-----高数-----英语------C语言------平均分\n");
-	for(i=0;i<=L->last;i++)
-	{
-		L->elem[i].avg=(L->elem[i].math+L->elem[i].english+L->elem[i].c)/3;
-		printf("%-9d",L->elem[i].num);
-		printf("%-9s",L->elem[i].name);
-		printf("%-9d",L->elem[i].math);
-		printf("%-10d",L->elem[i].english);
-		printf("%-10d",L->elem[i].c);
-		printf("%-10d\n",L->elem[i].avg);
-	}
-}
-
-void fun3(seqlist *L)
-{
-    int x;
-    printf("按学号查询or姓名查询(1 or 2): ");
-    scanf("%d",&x);
-    if(x==1)
-    {
-        int number;
-        printf("请输入学号: ");
-        scanf("%d",&number);
-        int i=0;        /*i为扫描计数器，初值为0，即从第一个元素开始比较*/
-        while ((i<=L->last)&&(L->elem[i].num!=number))		/*顺序扫描表，直到找到值为key的元素, 或扫描到表尾而没找到*/
-		i++;
-		printf("学号-----姓名-----高数-----英语------C语言\n");
-		printf("%-9d",L->elem[i].num);
-		printf("%-9s",L->elem[i].name);
-		printf("%-9d",L->elem[i].math);
-		printf("%-10d",L->elem[i].english);
-		printf("%-10d\n",L->elem[i].c);
-    }
-    else
-    {
-        printf("请输入姓名: ");
-        char name1[20];
-        scanf("%s",name1);
-        int i=0;        /*i为扫描计数器，初值为0，即从第一个元素开始比较*/
-        while ((i<=L->last)&&strcmp(L->elem[i].name,name1))		/*顺序扫描表，直到找到值为key的元素, 或扫描到表尾而没找到*/
-		i++;
-        printf("学号-----姓名-----高数-----英语------C语言\n");
-		printf("%-9d",L->elem[i].num);
-		printf("%-9s",L->elem[i].name);
-		printf("%-9d",L->elem[i].math);
-		printf("%-10d",L->elem[i].english);
-		printf("%-10d\n",L->elem[i].c);
-    }
-}
-
-void fun4(seqlist *L)
-{
-    ElemType temp;
     int i,j;
-    for(i=0;i<L->last;i++)
-        for(j=0;j<L->last-i;j++)
-    {
-        if(L->elem[j].sum<L->elem[j+1].sum)
-        {
-            temp=L->elem[j+1];
-            L->elem[j+1]=L->elem[j];
-            L->elem[j]=temp;
-        }
-    }
-    printf("按照总分排序之后的结果：\n");
-	printf("学号-----姓名-----高数-----英语------C语言------总分\n");
-	for(i=0;i<=L->last;i++)
-	{
-		printf("%-9d",L->elem[i].num);
-		printf("%-9s",L->elem[i].name);
-		printf("%-9d",L->elem[i].math);
-		printf("%-10d",L->elem[i].english);
-		printf("%-10d",L->elem[i].c);
-		printf("%-10d\n",L->elem[i].sum);
-	}
-}
-
-void fun5(seqlist *L)
-{
-    L->math_max=0;
-    L->math_min=101;
-    L->math_avg=0;
-    L->english_max=0;
-    L->english_min=101;
-    L->english_avg=0;
-    L->c_max=0;
-    L->c_min=101;
-    L->c_avg=0;
-    int i;
+    fprintf(fp,"电话,姓名,性别,表演名称,表演类别,分数,1,2,3,4,5,6,7,8,9,10,最后得分\n");
     for(i=0;i<=L->last;i++)
     {
-        if(L->math_max<L->elem[i].math)
-            L->math_max=L->elem[i].math;
-        if(L->math_min>L->elem[i].math)
-            L->math_min=L->elem[i].math;
-            L->math_avg+=L->elem[i].math;
-        if(L->english_max<L->elem[i].english)
-            L->english_max=L->elem[i].english;
-        if(L->english_min>L->elem[i].english)
-            L->english_min=L->elem[i].english;
-            L->english_avg+=L->elem[i].english;
-        if(L->c_max<L->elem[i].c)
-            L->c_max=L->elem[i].c;
-        if(L->c_min>L->elem[i].c)
-            L->c_min=L->elem[i].c;
-            L->c_avg+=L->elem[i].c;
+        fprintf(fp,"%.0lf,",L->elem[i].num);
+        fprintf(fp,"%s,",L->elem[i].name);
+        fprintf(fp,"%s,",L->elem[i].sex);
+        fprintf(fp,"%s,",L->elem[i].play_name);
+        fprintf(fp,"%s,",L->elem[i].play_category);
+        for(j=0;j<10;j++)
+        {
+            fprintf(fp,"%.2lf,",L->elem[i].score[j]);
+        }
+        fprintf(fp,"%-2lf\n",L->elem[i].score_avg);
     }
-    L->math_avg=L->math_avg/(L->last+1);
-    L->english_avg=L->english_avg/(L->last+1);
-    L->c_avg=L->c_avg/(L->last+1);
-    printf("高数最高分：%d 最低分：%d 平均分：%d\n",L->math_max,L->math_min,L->math_avg);
-    printf("英语最高分：%d 最低分：%d 平均分：%d\n",L->english_max,L->english_min,L->english_avg);
-    printf("c语言最高分：%d 最低分：%d 平均分：%d\n",L->c_max,L->c_min,L->c_avg);
+	printf("文件成功保存到《学生信息.txt》中\n");
+	fp=fopen("裁判信息.txt","w");
+    if(fp==NULL)
+    {
+        printf("文件打开失败！数据无法保存！\n");
+        return ;
+    }
+    fprintf(fp,"电话,姓名,性别\n");
+    for(i=0;i<=L->last2;i++)
+        {
+            fprintf(fp,"%.0lf,",L->elem2[i].num);
+            fprintf(fp,"%s,",L->elem2[i].name);
+            fprintf(fp,"%s\n",L->elem2[i].sex);
+        }
+	printf("文件成功保存到《裁判信息.txt》中\n");
+}
+
+void login(seqlist *L)
+{
+    FILE *fp;
+    char s[1000];
+    int i,j;
+    i=0;
+    fp=fopen("选手信息.txt","r");
+    if(fp==NULL)
+    {
+        printf("文件打开失败！数据无法读取！\n");
+        return ;
+    }
+    fgets(s,1,fp);
+    while(!feof(fp))
+    {
+        fscanf(fp,"%lf,",&L->elem[i].num);
+        fscanf(fp,"%s,",L->elem[i].name);
+        fscanf(fp,"%s,",L->elem[i].sex);
+        fscanf(fp,"%s,",L->elem[i].play_name);
+        fscanf(fp,"%s,",L->elem[i].play_category);
+        for(j=0;j<=L->last2;j++)
+        {
+            fscanf(fp,"%lf,",&L->elem[i].score[j]);
+            if(L->elem[i].score_max<L->elem[i].score[j])
+                L->elem[i].score_max=L->elem[i].score[j];
+            if(L->elem[i].score_min>L->elem[i].score[j])
+                L->elem[i].score_min=L->elem[i].score[j];
+            L->elem[i].score_sum+=L->elem[i].score[j];
+        }
+        fscanf(fp,"%lf",&L->elem[i].score_avg);
+        i++;
+    }
+    L->last=i-1;
+    printf("学生信息读取成功！\n");
+    fclose(fp);
+    i=0;
+    fp=fopen("裁判信息.txt","r");
+    if(fp==NULL)
+    {
+        printf("文件打开失败！数据无法读取！\n");
+        return ;
+    }
+    while(!feof(fp))
+    {
+        fscanf(fp,"%lf",&L->elem2[i].num);
+        fscanf(fp,"%s",L->elem2[i].name);
+        fscanf(fp,"%s",L->elem2[i].sex);
+        i++;
+    }
+    L->last2=i-1;
+    printf("裁判信息读取成功！\n");
+    fclose(fp);
+}
+void sort2(seqlist *L)
+{
+    quicksort(L->elem, L->last+1, 0, L->last);
+    onput(L,1);
 }
 void mean()
 {
@@ -534,15 +632,12 @@ void mean()
 		printf("\t|                     3.插入选手信息                           |\n");
 		printf("\t|                     4.修改选手信息                           |\n");
 		printf("\t|                     5.删除选手信息                           |\n");
-		printf("\t|                     6.输出所有选手信息                       |\n");
-		printf("\t|                     7.退出并保存                             |\n");
+		printf("\t|                     6.选手分数排序                           |\n");
+		printf("\t|                     7.输出所有选手信息                       |\n");
+		printf("\t|                     8.读取文件                               |\n");
+		printf("\t|                     9.退出并保存                             |\n");
 		printf("\t|--------------------------------------------------------------|\n");
-		printf("\t|                     8.计算总分                               |\n");
-		printf("\t|                     9.计算平均分                             |\n");
-		printf("\t|                     10.姓名/学号查询                         |\n");
-		printf("\t|                     11.总分排序                              |\n");
-		printf("\t|                     12.统计分数                              |\n");
-		printf("\t|--------------------------------------------------------------|\n");
+
 		printf("请输入1-12:");
 		scanf("%d",&t);
 		switch(t)
@@ -552,13 +647,11 @@ void mean()
 			case 3 : Insert(&l); break;
 			case 4 : Updata(&l); break;
 			case 5 : Delete(&l); break;
-			case 6 : onput(&l); break;
-			case 7 : save(&l); return 0;
-			case 8 : fun1(&l); break;
-			case 9 : fun2(&l); break;
-			case 10 : fun3(&l); break;
-			case 11 : fun4(&l); break;
-			case 12 : fun5(&l); break;
+			case 6 : sort2(&l); break;
+			case 7 : onput(&l,1);onput(&l,2); break;
+			case 8 : login(&l); break;
+			case 9 : save(&l); return 0;
+
 		}
 	}
 }
