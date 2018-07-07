@@ -137,7 +137,7 @@ void Updata(seqlist *L)
                     L->elem[q-1].score_min=L->elem[q-1].score[i];
                 L->elem[q-1].score_sum+=L->elem[q-1].score[i];
             }
-            L->elem[q-1].score_avg=(L->elem[q-1].score_sum-L->elem[q-1].score_max-L->elem[q-1].score_min)/8;
+            L->elem[q-1].score_avg=(L->elem[q-1].score_sum-L->elem[q-1].score_max-L->elem[q-1].score_min)/(L->last2-1);
             printf("信息修改完成！\n");
         }
     }
@@ -252,7 +252,7 @@ int Insert(seqlist *L)
                 x1.score_min=x1.score[i];
             x1.score_sum+=x1.score[i];
         }
-        x1.score_avg=(x1.score_sum-x1.score_max-x1.score_min)/8;
+        x1.score_avg=(x1.score_sum-x1.score_max-x1.score_min)/(L->last2-1);
         printf("信息录入完成！\n");
         printf("请输入要插入的元素的位置:\n");
         scanf("%d",&i);
