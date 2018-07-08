@@ -491,7 +491,7 @@ void onput(seqlist *L,int x)
 
 void save(seqlist *L)
 {
-    FILE *fp;
+    FILE *fp,*fw;
     fp=fopen("选手信息.csv","w");
     if(fp==NULL)
     {
@@ -511,7 +511,27 @@ void save(seqlist *L)
         {
             fprintf(fp,"%.2lf,",L->elem[i].score[j]);
         }
-        fprintf(fp,"%-2lf\n",L->elem[i].score_avg);
+        fprintf(fp,"%.2lf\n",L->elem[i].score_avg);
+    }
+    fw=fopen("选手信息.txt","w");
+    if(fw==NULL)
+    {
+        printf("文件打开失败！数据无法保存！\n");
+        return ;
+    }
+    fprintf(fw,"电话 姓名 性别 表演名称 表演类别 分数 1 2 3 4 5 6 7 8 9 10 最后得分\n");
+    for(i=0;i<=L->last;i++)
+    {
+        fprintf(fw,"%.0lf ",L->elem[i].num);
+        fprintf(fw,"%s ",L->elem[i].name);
+        fprintf(fw,"%s ",L->elem[i].sex);
+        fprintf(fw,"%s ",L->elem[i].play_name);
+        fprintf(fw,"%s ",L->elem[i].play_category);
+        for(j=0;j<10;j++)
+        {
+            fprintf(fw,"%.2lf ",L->elem[i].score[j]);
+        }
+        fprintf(fw,"%.2lf\n",L->elem[i].score_avg);
     }
 	printf("文件成功保存到《学生信息.csv》中\n");
 	fp=fopen("裁判信息.csv","w");
@@ -527,6 +547,19 @@ void save(seqlist *L)
             fprintf(fp,"%s,",L->elem2[i].name);
             fprintf(fp,"%s\n",L->elem2[i].sex);
         }
+    fw=fopen("裁判信息.txt","w");
+    if(fw==NULL)
+    {
+        printf("文件打开失败！数据无法保存！\n");
+        return ;
+    }
+    fprintf(fw,"电话 姓名 性别\n");
+    for(i=0;i<=L->last2;i++)
+        {
+            fprintf(fw,"%.0lf ",L->elem2[i].num);
+            fprintf(fw,"%s ",L->elem2[i].name);
+            fprintf(fw,"%s\n",L->elem2[i].sex);
+        }
 	printf("文件成功保存到《裁判信息.csv》中\n");
 }
 
@@ -535,41 +568,43 @@ void login(seqlist *L)
     FILE *fp;
     char s[1000];
     int i,j;
-    i=0;
-    fp=fopen("裁判信息.csv","r");
+    fp=fopen("裁判信息.txt","r");
     if(fp==NULL)
     {
         printf("文件打开失败！数据无法读取！\n");
         return ;
     }
     fgets(s,1000,fp);
+    i=0;
     while(!feof(fp))
     {
         fscanf(fp,"%lf",&L->elem2[i].num);
-        fscanf(fp,",%s",L->elem2[i].name);
-        fscanf(fp,",%s\n",L->elem2[i].sex);
+        fscanf(fp,"%s",L->elem2[i].name);
+        fscanf(fp,"%s\n",L->elem2[i].sex);
         i++;
     }
     L->last2=i-1;
+    printf("last=%d\n",L->last2);
     printf("裁判信息读取成功！\n");
     fclose(fp);
-    i=0;
-    fp=fopen("选手信息.csv","r");
+    fp=fopen("选手信息.txt","r");
     if(fp==NULL)
     {
         printf("文件打开失败！数据无法读取！\n");
         return ;
     }
     fgets(s,1000,fp);
+    i=0;
     while(!feof(fp))
     {
-        fscanf(fp,"%lf,",&L->elem[i].num);
-        fscanf(fp,"%s,",L->elem[i].sex);
-        fscanf(fp,"%s,",L->elem[i].play_name);
-        fscanf(fp,"%s,,",L->elem[i].play_category);
-        for(j=0;j<=L->last2;j++)
+        fscanf(fp,"%lf",&L->elem[i].num);
+        fscanf(fp,"%s",L->elem[i].name);
+        fscanf(fp,"%s",L->elem[i].sex);
+        fscanf(fp,"%s",L->elem[i].play_name);
+        fscanf(fp,"%s",L->elem[i].play_category);
+        for(j=0;j<10;j++)
         {
-            fscanf(fp,"%lf,",&L->elem[i].score[j]);
+            fscanf(fp,"%lf",&L->elem[i].score[j]);
             if(L->elem[i].score_max<L->elem[i].score[j])
                 L->elem[i].score_max=L->elem[i].score[j];
             if(L->elem[i].score_min>L->elem[i].score[j])
@@ -580,6 +615,7 @@ void login(seqlist *L)
         i++;
     }
     L->last=i-1;
+    printf("last=%d\n",L->last);
     printf("学生信息读取成功！\n");
     fclose(fp);
 }
