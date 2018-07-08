@@ -31,3 +31,4 @@ typedef struct
 	int last2;
 }seqlist;
 
+#pragma once
