@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "打分", "打分\打分.vcxproj", "{96780122-4E8E-44F0-9624-153FEDA29A03}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "打分", "打分.vcxproj", "{96780122-4E8E-44F0-9624-153FEDA29A03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +26,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {5804ED14-5D36-4065-A5C8-B73CEDF1324A}
+		SolutionGuid = {F6A51198-F91D-4803-8FB2-2297EE5465CA}
 	EndGlobalSection
 EndGlobal

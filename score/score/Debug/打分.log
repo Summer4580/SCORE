@@ -1,5 +1,4 @@
 ﻿  源.c
-d:\大学\github数据库\score\score\打分\打分\源.c(189): warning C4013: “onput”未定义；假设外部返回 int
-d:\大学\github数据库\score\score\打分\打分\源.c(478): warning C4101: “j”: 未引用的局部变量
-d:\大学\github数据库\score\score\打分\打分\源.c(490): warning C4716: “onput”: 必须返回一个值
-  打分.vcxproj -> D:\大学\GITHUB数据库\SCORE\SCORE\打分\Debug\打分.exe
+d:\大学\github数据库\score\score\score\score\源.c(194): warning C4013: “onput”未定义；假设外部返回 int
+d:\大学\github数据库\score\score\score\score\源.c(482): warning C4101: “j”: 未引用的局部变量
+  打分.vcxproj -> D:\大学\GITHUB数据库\SCORE\SCORE\score\score\Debug\打分.exe

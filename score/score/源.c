@@ -2,12 +2,12 @@
 #include "标头.h"
 #include "标头1.h"
 
-int  Locate(seqlist L, double num)
+int  Locate(seqlist *L, double num)
 {
 	int i = 0;        /*i为扫描计数器，初值为0，即从第一个元素开始比较*/
-	while ((i <= L.last) && (L.elem[i].num != num))		/*顺序扫描表，直到找到值为key的元素, 或扫描到表尾而没找到*/
+	while ((i <= L->last) && (L->elem[i].num != num))		/*顺序扫描表，直到找到值为key的元素, 或扫描到表尾而没找到*/
 		i++;
-	if (i <= L.last)
+	if (i <= L->last)
 	{
 		return(i + 1);  /*若找到值为e的元素，则返回其序号*/
 	}
@@ -19,12 +19,12 @@ int  Locate(seqlist L, double num)
 
 	}
 }
-int  Locate2(seqlist L, double num)
+int  Locate2(seqlist *L, double num)
 {
 	int i = 0;        /*i为扫描计数器，初值为0，即从第一个元素开始比较*/
-	while ((i <= L.last2) && (L.elem2[i].num != num))		/*顺序扫描表，直到找到值为key的元素, 或扫描到表尾而没找到*/
+	while ((i <= L->last2) && (L->elem2[i].num != num))		/*顺序扫描表，直到找到值为key的元素, 或扫描到表尾而没找到*/
 		i++;
-	if (i <= L.last2)
+	if (i <= L->last2)
 	{
 		return(i + 1);  /*若找到值为e的元素，则返回其序号*/
 	}
@@ -46,7 +46,7 @@ void look(seqlist *L)
 	{
 		printf("请输入要查找的元素值:\n");
 		scanf("%lf", &q);
-		temp = Locate(*L, q) - 1;
+		temp = Locate(L, q) - 1;
 		if (temp != -1)
 		{
 			printf("电话-----------姓名-----性别-----表演名称------表演类别--分数----1------2------3------4------5------6------7------8------9------10-----最后得分\n");
@@ -67,7 +67,7 @@ void look(seqlist *L)
 	{
 		printf("请输入要查找的元素值:\n");
 		scanf("%lf", &q);
-		temp = Locate2(*L, q) - 1;
+		temp = Locate2(L, q) - 1;
 		if (temp != -1)
 		{
 			printf("电话-----------姓名-----性别\n");
@@ -107,7 +107,7 @@ void Updata(seqlist *L)
 	{
 		printf("请输入要修改的电话：\n");
 		scanf("%lf", &tem);
-		q = Locate(*L, tem);
+		q = Locate(L, tem);
 		if (q == -1)
 		{
 			printf("你要修改的元素不存在！\n");
@@ -137,6 +137,11 @@ void Updata(seqlist *L)
 					L->elem[q - 1].score_min = L->elem[q - 1].score[i];
 				L->elem[q - 1].score_sum += L->elem[q - 1].score[i];
 			}
+			int z;
+			for (z = L->last2 + 1; z < 10; z++)
+			{
+				L->elem[q - 1].score[z] = 0;
+			}
 			L->elem[q - 1].score_avg = (L->elem[q - 1].score_sum - L->elem[q - 1].score_max - L->elem[q - 1].score_min) / (L->last2 - 1);
 			printf("信息修改完成！\n");
 		}
@@ -145,7 +150,7 @@ void Updata(seqlist *L)
 	{
 		printf("请输入要修改人的电话：\n");
 		scanf("%lf", &tem);
-		q = Locate2(*L, tem);
+		q = Locate2(L, tem);
 		if (q == -1)
 		{
 			printf("你要修改的元素不存在！\n");
@@ -174,7 +179,7 @@ void Delete(seqlist *L)
 	{
 		printf("请输入要删除的元素:\n");
 		scanf("%lf", &q);
-		i = Locate(*L, q);
+		i = Locate(L, q);
 
 		if (i<1)
 		{
@@ -193,7 +198,7 @@ void Delete(seqlist *L)
 	{
 		printf("请输入要删除的元素:\n");
 		scanf("%lf", &q);
-		i = Locate2(*L, q);
+		i = Locate2(L, q);
 
 		if (i<1)
 		{
@@ -213,6 +218,7 @@ void Delete(seqlist *L)
 int Insert(seqlist *L)
 {
 	ElemType x1;
+	double x;
 	memset(x1.score, 0, sizeof(x1.score));
 	ElemType2 x2;
 	int i;
@@ -226,14 +232,8 @@ int Insert(seqlist *L)
 		x1.score_sum = 0;
 		printf("请输入选手的信息:\n");
 		printf("电话: ");
-		scanf("%lf", &x1.num);
-		int temp;
-		temp = Locate(*L, x1.num);
-		if (temp == -1)
-		{
-			printf("你输入的号码重复!请重新操作\n");
-			return 0;
-		}
+		scanf("%lf", &x);
+		x1.num = x;
 		printf("姓名: ");
 		scanf("%s", x1.name);
 		printf("性别: ");
@@ -253,6 +253,11 @@ int Insert(seqlist *L)
 			x1.score_sum += x1.score[i];
 		}
 		x1.score_avg = (x1.score_sum - x1.score_max - x1.score_min) / (L->last2 - 1);
+		int z;
+		for (z = L->last2 + 1; z < 10; z++)
+		{
+			x1.score[z] = 0;
+		}
 		printf("信息录入完成！\n");
 		printf("请输入要插入的元素的位置:\n");
 		scanf("%d", &i);
@@ -280,14 +285,8 @@ int Insert(seqlist *L)
 	{
 		printf("请输入要插入的元素:\n");
 		printf("电话: ");
-		scanf("%lf", &x2.num);
-		int temp;
-		temp = Locate2(*L, x2.num);
-		if (temp == -1)
-		{
-			printf("你输入的号码重复!,请重新操作\n");
-			return 0;
-		}
+		scanf("%lf", &x);
+		x2.num = x;
 		printf("姓名: ");
 		scanf("%s", x2.name);
 		printf("性别: ");
@@ -427,6 +426,11 @@ void input(seqlist *L)
 				L->elem[i].score_sum += L->elem[i].score[j];
 			}
 			L->elem[i].score_avg = (L->elem[i].score_sum - L->elem[i].score_max - L->elem[i].score_min) / (L->last2 - 1);
+			int z;
+			for (z = L->last2 + 1; z < 10; z++)
+			{
+				L->elem[i].score[z] = 0;
+			}
 		}
 		onput(L, x);
 	}
@@ -485,6 +489,7 @@ int onput(seqlist *L, int x)
 			printf("%-9s\n", L->elem2[i].sex);
 		}
 	}
+	return 0;
 
 
 }
